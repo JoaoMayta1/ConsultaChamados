@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamados</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Importando as bibliotecas do Bootstrap e Firebase -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+    
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Ordens de Chamados</h1>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Equipamentos Selecionados</th>
+          <th>Solicitante</th>
+          <th>Tipo de Relato</th>
+          <th>Problema Relatado</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaOrdens">
+        <!-- Os dados serão adicionados aqui -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <script>
+    const firebaseConfig = {
+      aapiKey: "AIzaSyCiafrD-bUZBMvGvZfqRKwA-GRLEtSLBPU",
+      authDomain: "bancorar-82457.firebaseapp.com",
+      databaseURL: "https://bancorar-82457-default-rtdb.firebaseio.com",
+      projectId: "bancorar-82457",
+      storageBucket: "bancorar-82457.appspot.com",
+      messagingSenderId: "198160041951",
+      appId: "1:198160041951:web:55289ecc1a9a544ca7666a",
+      measurementId: "G-N2NBS51NTK",
+    }
+    firebase.initializeApp(firebaseConfig);
+
+    // Obtendo referência do nó "ordem" no Firebase Realtime Database
+    var ordemRef = firebase.database().ref('ordem');
+
+    // Lendo dados do nó "ordem"
+    ordemRef.on('value', function(snapshot) {
+      var ordens = snapshot.val();
+      var tabelaOrdens = document.getElementById('tabelaOrdens');
+      tabelaOrdens.innerHTML = ''; // Limpando a tabela antes de atualizar os dados
+
+      // Iterando sobre as ordens e adicionando na tabela
+      for (var key in ordens) {
+        if (ordens.hasOwnProperty(key)) {
+          var ordem = ordens[key];
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + JSON.stringify(ordem.equipamentosSelecionados) + '</td>' +
+                         '<td>' + ordem.nomeSolicitante + '</td>' +
+                         '<td>' + ordem.tipoRelato + '</td>' +
+                         '<td>' + ordem.problemaRelatado + '</td>';
+          tabelaOrdens.appendChild(tr);
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>
